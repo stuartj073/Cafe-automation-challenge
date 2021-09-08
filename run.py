@@ -1,6 +1,6 @@
 import gspread
 from google.oauth2.service_account import Credentials 
-from pprint import pprint
+# from pprint import pprint
 
 
 SCOPE = [
@@ -14,6 +14,7 @@ SCOPED_CREDS = CREDS.with_scopes(SCOPE)
 GSPREAD_CLIENT = gspread.authorize(SCOPED_CREDS)
 SHEET = GSPREAD_CLIENT.open('love_sandwiches')
 
+
 def get_sales_data():
     """
     Get sales figure from user
@@ -24,8 +25,6 @@ def get_sales_data():
         print("Example: 10, 20, 30, 40, 50, 60\n")
 
         data_str = input("Enter your data here: ")
-        
-
         sales_data = data_str.split(",")
         validate_data(sales_data)
 
@@ -64,6 +63,7 @@ def update_sales_worksheet(data):
     sales_worksheet.append_row(data)
     print("Sales worksheet ipdated succesffully. \n")
 
+
 def update_surplus_worksheet(data):
     """
     Update surplus worksheet, add new row with the list data provided
@@ -72,6 +72,7 @@ def update_surplus_worksheet(data):
     surplus_worksheet = SHEET.worksheet("surplus")
     surplus_worksheet.append_row(surplus_data)
     print("Surplus worksheet updated succesffully. \n")
+
 
 def update_worksheet(data, worksheet):
     """
@@ -93,7 +94,6 @@ def calculate_surplus_data(sales_row):
     print("Calculating surplus data")
     stock = SHEET.worksheet("stock").get_all_values()
     stock_row = stock[-1]
-    print(stock_row)
     
     surplus_data = []
     for stock, sales in zip(stock_row, sales_row):
@@ -110,13 +110,13 @@ def get_last_5_entries_sales():
     """
     sales = SHEET.worksheet("sales")
 
-
     columns = []
     for ind in range(1, 7):
         column = sales.col_values(ind)
         columns.append(column[-5:])
 
     return columns
+
 
 def calculate_stock_data(data):
     """
@@ -133,7 +133,6 @@ def calculate_stock_data(data):
     return new_stock_data
 
 
-
 def main():
     """
     Run all program functions
@@ -144,8 +143,9 @@ def main():
     new_surplus_data = calculate_surplus_data(sales_data)
     update_worksheet(new_surplus_data, "stock")
     sales_columns = get_last_5_entries_sales()
-    stock _data = calculate_stock_data(sales_columns)
+    stock_data = calculate_stock_data(sales_columns)
     update_worksheet(stock_data, "sales")
+
 
 print("Welcome to Love Sandwiches Data Automation")
 main()
